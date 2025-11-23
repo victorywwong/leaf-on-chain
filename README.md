@@ -96,13 +96,23 @@ graph LR
     D --> G[Leaf Context]
     E --> G
     F --> G
-    G --> H[On-Chain Leaf NFT]
+    G --> H[Decentralized Vector DB]
+    H --> I[Context Retrieval]
+    I --> J[On-Chain Leaf NFT]
+    J --> K[AI Response w/ RAG]
 
     style C fill:#FFD700
     style G fill:#90EE90
+    style H fill:#9370DB
 ```
 
-The vision: Normal CLI conversations with AI agents get analyzed and distilled into structured knowledge files (skills, personality patterns, thinking processes), which then form the contextual foundation for creating personalized Leaves on-chain.
+**The vision:** Normal CLI conversations with AI agents get analyzed and distilled into structured knowledge files (skills, personality patterns, thinking processes), which then form the contextual foundation for creating personalized Leaves on-chain.
+
+**Planned enhancements:**
+- **Decentralized Search/Vector DB**: Store distilled knowledge in decentralized vector databases (e.g., IPFS + semantic search, Ceramic, or other Web3 storage)
+- **RAG (Retrieval-Augmented Generation)**: Enable Leaves to retrieve relevant context from their knowledge base during conversations
+- **Dynamic Context**: Allow Leaves to evolve and grow their knowledge over time based on new interactions
+- **Knowledge Ownership**: All distilled knowledge remains cryptographically tied to the Leaf NFT owner
 
 ## Quick Start
 
