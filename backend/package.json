@@ -1,0 +1,28 @@
+{
+  "name": "leaf-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Leaf - AI digital replicas on Base blockchain",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["leaf", "ai", "blockchain", "base"],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "openai": "^6.9.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "viem": "^2.39.3"
+  }
+}
