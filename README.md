@@ -1,6 +1,6 @@
 # 🍃 Leaf - AI Digital Replicas on Chain
 
-**Immortalize your personality and interests on-chain. Chat with AI replicas powered by blockchain payments.**
+**Immortalize your personality on-chain. Chat with AI replicas powered by blockchain payments.**
 
 Leaf is a decentralized platform for creating AI digital replicas ("Leaves") that live on the blockchain. Each Leaf is an NFT with a unique personality that users can interact with by paying per message.
 
