@@ -28,6 +28,9 @@ contract LeafNFT is ERC721, Ownable {
     // Gateway contract address (can increment message count and set active status)
     address public gateway;
 
+    // Creation fee for public leaf creation (0.01 ETH)
+    uint256 public constant CREATION_FEE = 0.01 ether;
+
     // Events
     event GatewayUpdated(address indexed oldGateway, address indexed newGateway);
     event LeafCreated(
@@ -99,6 +102,45 @@ contract LeafNFT is ERC721, Ownable {
         });
 
         emit LeafCreated(leafId, to, name, pricePerMessage);
+
+        return leafId;
+    }
+
+    /**
+     * @dev Create a new leaf NFT (public version)
+     * Anyone can create a leaf by paying the creation fee
+     * @param name Name of the leaf
+     * @param personalityNote Short description of personality/interests
+     * @param pricePerMessage Price in wei to send one message to this leaf
+     */
+    function createLeafPublic(
+        string memory name,
+        string memory personalityNote,
+        uint256 pricePerMessage
+    ) external payable returns (uint256) {
+        require(msg.value >= CREATION_FEE, "Insufficient creation fee");
+        require(bytes(name).length >= 3 && bytes(name).length <= 50, "Name must be 3-50 characters");
+        require(bytes(personalityNote).length >= 10 && bytes(personalityNote).length <= 500, "Note must be 10-500 characters");
+        require(pricePerMessage >= 0.0001 ether, "Price too low (min 0.0001 ETH)");
+
+        uint256 leafId = _nextLeafId++;
+
+        _safeMint(msg.sender, leafId);  // Mint to caller
+
+        leaves[leafId] = Leaf({
+            name: name,
+            personalityNote: personalityNote,
+            pricePerMessage: pricePerMessage,
+            isActive: true,
+            createdAt: block.timestamp,
+            totalMessages: 0
+        });
+
+        // Transfer creation fee to contract owner
+        (bool success, ) = payable(owner()).call{value: msg.value}("");
+        require(success, "Fee transfer failed");
+
+        emit LeafCreated(leafId, msg.sender, name, pricePerMessage);
 
         return leafId;
     }

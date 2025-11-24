@@ -234,6 +234,26 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
           )}
         </div>
 
+        {/* Blockchain Info */}
+        {isConnected && (
+          <div className="leaf-card rounded-2xl p-5 border border-[color:var(--surface-muted)]/60">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-slate-900 dark:text-white">💸 Track Payment Flow</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">See where all payments go (70% to owner, 30% to platform)</p>
+              </div>
+              <a
+                href={`${config.blockExplorer.url}/address/${config.contracts.paymentGateway}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-sky-500 text-white rounded-lg hover:from-emerald-600 hover:to-sky-600 font-medium transition-all shadow-md flex items-center gap-2"
+              >
+                View on BaseScan ↗
+              </a>
+            </div>
+          </div>
+        )}
+
         {/* Chat Interface */}
         <div className="leaf-card rounded-2xl overflow-hidden border border-[color:var(--surface-muted)]/60">
           {/* Messages */}
@@ -324,9 +344,21 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
               </>
             )}
             {(isPaymentPending || isTxLoading) && (
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 flex items-center gap-2">
-                ⏳ Waiting for payment confirmation on Base...
-              </p>
+              <div className="text-sm text-slate-600 dark:text-slate-300 mt-2">
+                <p className="flex items-center gap-2 mb-1">
+                  ⏳ Waiting for payment confirmation on Base...
+                </p>
+                {txHash && (
+                  <a
+                    href={`${config.blockExplorer.url}/tx/${txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                  >
+                    View on {config.blockExplorer.name} ↗
+                  </a>
+                )}
+              </div>
             )}
           </div>
         </div>

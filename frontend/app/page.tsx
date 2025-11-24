@@ -13,6 +13,12 @@ export default function Home() {
             <p className="text-sm text-slate-600 dark:text-slate-400">AI Digital Replicas</p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/my-leaves"
+              className="px-4 py-2 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition-all"
+            >
+              My Leaves
+            </Link>
             <ThemeToggle />
             <ConnectButton />
           </div>
@@ -29,6 +35,22 @@ export default function Home() {
             Leaf creates immortal AI digital replicas on the Base blockchain.
             Each leaf preserves knowledge, personality, and can browse the internet to respond in your voice.
           </p>
+
+          {/* CTA Buttons */}
+          <div className="flex gap-4 justify-center">
+            <Link
+              href="/create"
+              className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-sky-500 text-white rounded-xl hover:from-emerald-600 hover:to-sky-600 font-bold text-lg transition-all shadow-lg hover:shadow-xl"
+            >
+              Create Your Leaf
+            </Link>
+            <Link
+              href="/chat/1"
+              className="px-8 py-4 bg-[color:var(--surface)] border-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 font-bold text-lg transition-all"
+            >
+              Try Demo
+            </Link>
+          </div>
         </div>
 
         {/* Features */}
