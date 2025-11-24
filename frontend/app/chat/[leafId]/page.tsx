@@ -6,6 +6,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagm
 import { formatEther } from 'viem';
 import { config } from '@/lib/config';
 import { paymentGatewayABI } from '@/lib/abis';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -185,50 +186,64 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <div className="min-h-screen bg-[color:var(--background)] text-[color:var(--foreground)] transition-colors">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-[color:var(--surface)]/90 backdrop-blur border-b border-[color:var(--surface-muted)]/50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-green-600">🍃 Leaf</h1>
-            <p className="text-sm text-gray-600">AI Digital Replica</p>
+            <h1 className="text-2xl font-bold text-green-600 dark:text-green-400">🍃 Leaf</h1>
+            <p className="text-sm text-slate-600 dark:text-slate-400">AI Digital Replica</p>
           </div>
-          <ConnectButton />
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <ConnectButton />
+          </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Leaf Info Card */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+          {/* Leaf Info Card */}
+        <div className="leaf-card rounded-2xl p-6 border border-[color:var(--surface-muted)]/60">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h2 className="text-3xl font-bold mb-2">{leaf.name}</h2>
-              <p className="text-gray-600 mb-4">{leaf.personalityNote}</p>
-              <div className="flex gap-4 text-sm">
-                <div className="bg-green-100 px-3 py-1 rounded-full">
-                  💰 {leaf?.pricePerMessage ? formatEther(leaf.pricePerMessage) : '0.001'} ETH per message
+              <p className="text-slate-600 dark:text-slate-300 mb-4">{leaf.personalityNote}</p>
+              <div className="flex gap-3 text-sm flex-wrap">
+                <div className="leaf-pill bg-transparent text-slate-900 border border-slate-300 dark:bg-emerald-500/20 dark:text-emerald-200 dark:border-emerald-500/30 font-semibold">
+                  💰 {leaf?.pricePerMessage ? formatEther(leaf.pricePerMessage) : '0.001'} ETH/msg
                 </div>
-                <div className="bg-blue-100 px-3 py-1 rounded-full">
+                <div className="leaf-pill bg-transparent text-slate-900 border border-slate-300 dark:bg-sky-500/20 dark:text-sky-200 dark:border-sky-500/30 font-semibold">
                   💬 {leaf?.totalMessages?.toString() || '0'} messages
                 </div>
-                <div className={`px-3 py-1 rounded-full ${
-                  leaf.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                }`}>
+                <div
+                  className={`leaf-pill border font-semibold ${
+                    leaf.isActive
+                      ? 'bg-transparent text-slate-900 border-slate-300 dark:bg-emerald-500/20 dark:text-emerald-200 dark:border-emerald-500/30'
+                      : 'bg-transparent text-slate-900 border-slate-300 dark:bg-rose-500/20 dark:text-rose-200 dark:border-rose-500/30'
+                  }`}
+                >
                   {leaf.isActive ? '✅ Active' : '💤 Hibernating'}
                 </div>
               </div>
             </div>
           </div>
+          {!leaf.isActive && (
+            <p className="mt-4 text-sm text-rose-600 dark:text-rose-300 font-medium">
+              This leaf is hibernating until its wallet balance is topped up.
+            </p>
+          )}
         </div>
 
         {/* Chat Interface */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="leaf-card rounded-2xl overflow-hidden border border-[color:var(--surface-muted)]/60">
           {/* Messages */}
-          <div className="h-96 overflow-y-auto p-6 space-y-4">
+          <div className="chat-messages-area h-96 overflow-y-auto p-6 space-y-4">
             {messages.length === 0 ? (
-              <div className="text-center text-gray-400 mt-20">
-                <p className="text-lg mb-2">Start a conversation!</p>
-                <p className="text-sm">Connect your wallet and send a message to chat with this leaf.</p>
+              <div className="text-center mt-20">
+                <div className="inline-block bg-[color:var(--surface)] rounded-2xl px-8 py-6 shadow-sm border border-[color:var(--surface-muted)]">
+                  <p className="text-lg mb-2 text-[color:var(--foreground)] font-semibold">Start a conversation!</p>
+                  <p className="text-sm opacity-70">Connect your wallet and send a message to chat with this leaf.</p>
+                </div>
               </div>
             ) : (
               messages.map((msg, idx) => (
@@ -237,15 +252,17 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[70%] rounded-lg p-4 ${
-                      msg.role === 'user'
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-100 text-gray-800'
+                    className={`max-w-[72%] rounded-2xl p-4 transition-all duration-200 shadow-sm ${
+                      msg.role === 'user' ? 'leaf-bubble-user' : 'leaf-bubble-ai'
                     }`}
                   >
                     <p className="whitespace-pre-wrap">{msg.content}</p>
-                    <p className="text-xs mt-2 opacity-70">
-                      {new Date(msg.timestamp).toLocaleTimeString()}
+                    <p
+                      className={`text-[0.65rem] mt-2 tracking-wide uppercase ${
+                        msg.role === 'user' ? 'text-emerald-50/80' : 'text-slate-500'
+                      }`}
+                    >
+                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                 </div>
@@ -253,22 +270,22 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
             )}
             {isSending && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg p-4">
-                  <p className="text-gray-600">Thinking...</p>
+                <div className="leaf-bubble-ai rounded-2xl p-4 animate-pulse">
+                  <p className="text-slate-600 dark:text-slate-200">Thinking...</p>
                 </div>
               </div>
             )}
           </div>
 
           {/* Input */}
-          <div className="border-t p-4">
+          <div className="border-t border-[color:var(--surface-muted)] bg-[color:var(--surface)]/90 p-4">
             {!isConnected ? (
               <div className="text-center py-4">
-                <p className="text-gray-600 mb-4">Connect your wallet to start chatting</p>
+                <p className="text-gray-600 dark:text-slate-300 mb-4">Connect your wallet to start chatting</p>
                 <ConnectButton />
               </div>
             ) : !leaf.isActive ? (
-              <div className="text-center py-4 text-red-600">
+              <div className="text-center py-4 text-red-600 dark:text-red-400">
                 This leaf is currently hibernating and cannot respond.
               </div>
             ) : (
@@ -280,13 +297,13 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && !isSending && handleSendMessage()}
                     placeholder="Type your message..."
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="flex-1 px-4 py-3 border border-[color:var(--surface-muted)] rounded-xl bg-[color:var(--surface-muted)] text-[color:var(--foreground)] placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-4 focus:ring-emerald-200 dark:focus:ring-emerald-500/40 transition-colors"
                     disabled={isSending || isPaymentPending || isTxLoading}
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim() || isSending || isPaymentPending || isTxLoading}
-                    className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed font-medium transition-colors"
+                    className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-sky-500 text-white rounded-xl hover:from-emerald-600 hover:to-sky-600 disabled:bg-gradient-to-r disabled:from-slate-400 disabled:to-slate-400 dark:disabled:from-slate-700 dark:disabled:to-slate-700 disabled:cursor-not-allowed font-semibold transition-all shadow-md"
                   >
                     {isPaymentPending || isTxLoading
                       ? 'Paying...'
@@ -297,7 +314,7 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
                   {(isSending || isPaymentPending || isTxLoading) && (
                     <button
                       onClick={handleReset}
-                      className="px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors"
+                      className="px-4 py-3 bg-rose-500 text-white rounded-xl hover:bg-rose-600 font-medium transition-colors"
                       title="Cancel and reset"
                     >
                       Reset
@@ -307,7 +324,7 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
               </>
             )}
             {(isPaymentPending || isTxLoading) && (
-              <p className="text-sm text-gray-600 mt-2">
+              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 flex items-center gap-2">
                 ⏳ Waiting for payment confirmation on Base...
               </p>
             )}
@@ -315,7 +332,7 @@ export default function ChatPage({ params }: { params: Promise<{ leafId: string 
         </div>
 
         {/* Instructions */}
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-gray-700">
+        <div className="mt-2 bg-[color:var(--surface)]/80 border border-[color:var(--surface-muted)] rounded-2xl p-5 text-sm text-slate-700 dark:text-slate-300 leaf-card">
           <p className="font-semibold mb-2">💡 How it works:</p>
           <ol className="list-decimal list-inside space-y-1">
             <li>Connect your wallet (needs Base Sepolia ETH)</li>
