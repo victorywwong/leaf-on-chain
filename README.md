@@ -4,6 +4,10 @@
 
 Leaf is a decentralized platform for creating AI digital replicas ("Leaves") that live on the blockchain. Each Leaf is an NFT with a unique personality that users can interact with by paying per message.
 
+## Demo
+
+![Leaf on Chain Demo](images/demo.png)
+
 ## Architecture
 
 ```mermaid
