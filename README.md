@@ -48,11 +48,12 @@ graph TB
 
 ## Features
 
-- **On-Chain Leaves**: Each AI replica is an ERC-721 NFT with unique personality traits
+- **On-Chain Leaves**: Each AI replica is an ERC-721 NFT with unique personality traits stored on-chain
+- **Public Leaf Creation**: Anyone can create their own Leaf by paying a 0.01 ETH creation fee
 - **Pay-Per-Message**: Users pay ETH for each message they send to a Leaf
 - **Revenue Split**: 70% to Leaf owner, 30% to platform treasury
 - **Real-Time Web Search**: GPT-5.1 with internet access for current information
-- **Conversation Memory**: Full context retention across messages
+- **Ephemeral Conversations**: Conversations are volatile memories, not stored anywhere
 - **Hibernation Mode**: Owners can pause/resume their Leaves
 
 ## Tech Stack
@@ -77,42 +78,22 @@ graph TB
 
 ### ✅ Completed
 - Smart contract development and deployment
+- Public leaf creation with 0.01 ETH creation fee
+- Leaf management interface (/my-leaves)
 - Backend API with payment verification
 - Frontend with wallet integration
 - GPT-5.1 integration with web search
-- Conversation history support
+- Real-time conversation context (ephemeral, not stored)
 
-### 🚧 Work in Progress
+### 🎯 Philosophy
 
-**Leaf Knowledge Distillation Pipeline** - A system to transform real user conversations into Leaf personalities:
+Leaves are **thermal laminates** - sealed personalities on-chain. Each Leaf is an immutable NFT with a personality note that defines how it responds. Conversations are ephemeral "volatile memories" that exist only during the chat session - no conversation history is stored anywhere.
 
-```mermaid
-graph LR
-    A[User ↔ Agent Chat] --> B[CLI Conversations]
-    B --> C{Distillation Process}
-    C --> D[skills.md]
-    C --> E[personality.md]
-    C --> F[thinking.md]
-    D --> G[Leaf Context]
-    E --> G
-    F --> G
-    G --> H[Decentralized Vector DB]
-    H --> I[Context Retrieval]
-    I --> J[On-Chain Leaf NFT]
-    J --> K[AI Response w/ RAG]
-
-    style C fill:#FFD700
-    style G fill:#90EE90
-    style H fill:#9370DB
-```
-
-**The vision:** Normal CLI conversations with AI agents get analyzed and distilled into structured knowledge files (skills, personality patterns, thinking processes), which then form the contextual foundation for creating personalized Leaves on-chain.
-
-**Planned enhancements:**
-- **Decentralized Search/Vector DB**: Store distilled knowledge in decentralized vector databases (e.g., IPFS + semantic search, Ceramic, or other Web3 storage)
-- **RAG (Retrieval-Augmented Generation)**: Enable Leaves to retrieve relevant context from their knowledge base during conversations
-- **Dynamic Context**: Allow Leaves to evolve and grow their knowledge over time based on new interactions
-- **Knowledge Ownership**: All distilled knowledge remains cryptographically tied to the Leaf NFT owner
+**This design ensures:**
+- Simple, predictable behavior
+- No complex data storage infrastructure needed
+- True decentralization (everything on-chain or computed on-demand)
+- Clear value proposition: pay to chat with a personality, not a database
 
 ## Quick Start
 
@@ -140,15 +121,15 @@ cd ../frontend && npm install
 Backend (`backend/.env`):
 ```bash
 OPENAI_API_KEY=your_openai_api_key
-LEAF_NFT_ADDRESS=0xaf2a611DA49ee732F29909016ABb8099A3E5371A
-PAYMENT_GATEWAY_ADDRESS=0xFE9E089D4b751D1D02596261B9522660C9807E1E
+LEAF_NFT_ADDRESS=0xfcD5AF2353526fE9513EE77F98eD2Bc21127C72a
+PAYMENT_GATEWAY_ADDRESS=0xCEFA131cDFA9B966AF23df46c7D6d8e3d5872b02
 ```
 
 Frontend (`frontend/.env.local`):
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_LEAF_NFT_ADDRESS=0xaf2a611DA49ee732F29909016ABb8099A3E5371A
-NEXT_PUBLIC_PAYMENT_GATEWAY_ADDRESS=0xFE9E089D4b751D1D02596261B9522660C9807E1E
+NEXT_PUBLIC_LEAF_NFT_ADDRESS=0xfcD5AF2353526fE9513EE77F98eD2Bc21127C72a
+NEXT_PUBLIC_PAYMENT_GATEWAY_ADDRESS=0xCEFA131cDFA9B966AF23df46c7D6d8e3d5872b02
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 ```
 
@@ -166,16 +147,18 @@ Visit `http://localhost:3000` and connect your wallet!
 
 ## Deployed Contracts (Base Sepolia)
 
-- **LeafNFT**: [`0xaf2a611DA49ee732F29909016ABb8099A3E5371A`](https://sepolia.basescan.org/address/0xaf2a611DA49ee732F29909016ABb8099A3E5371A)
-- **PaymentGateway**: [`0xFE9E089D4b751D1D02596261B9522660C9807E1E`](https://sepolia.basescan.org/address/0xFE9E089D4b751D1D02596261B9522660C9807E1E)
+- **LeafNFT**: [`0xfcD5AF2353526fE9513EE77F98eD2Bc21127C72a`](https://sepolia.basescan.org/address/0xfcD5AF2353526fE9513EE77F98eD2Bc21127C72a)
+- **PaymentGateway**: [`0xCEFA131cDFA9B966AF23df46c7D6d8e3d5872b02`](https://sepolia.basescan.org/address/0xCEFA131cDFA9B966AF23df46c7D6d8e3d5872b02)
 
 ## How It Works
 
-1. **Create a Leaf**: Mint an NFT with a personality description and price per message
-2. **Users Connect**: Connect wallet via RainbowKit
-3. **Pay to Chat**: Each message requires on-chain payment (verified by backend)
-4. **AI Responds**: GPT-5.1 generates response based on Leaf's personality
-5. **Revenue Split**: Payment automatically distributed (70% owner, 30% treasury)
+1. **Create a Leaf**: Visit `/create`, fill out the form (name, personality note, price), pay 0.01 ETH creation fee
+2. **Leaf is Minted**: NFT minted to your wallet with personality sealed on-chain
+3. **Users Discover**: Others find your Leaf and connect their wallet
+4. **Pay to Chat**: Each message requires on-chain payment (verified by backend)
+5. **AI Responds**: GPT-5.1 generates response based on Leaf's personality note with web search access
+6. **Revenue Split**: Payment automatically distributed (70% to you, 30% to platform treasury)
+7. **Manage Your Leaf**: View your leaves at `/my-leaves`, update settings anytime
 
 ## Development
 
