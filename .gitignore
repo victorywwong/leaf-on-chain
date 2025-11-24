@@ -1,6 +1,11 @@
 # Agent Documentation
 agent_docs/
 
+# Project documentation (local only)
+PRD.md
+CLAUDE.md
+CODEX.md
+
 # Environment variables and secrets
 .env
 .env.local
